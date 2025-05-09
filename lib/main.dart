@@ -3,6 +3,7 @@ import 'package:vet_assist/login.dart';
 import 'package:vet_assist/signin.dart';
 import 'package:vet_assist/splash.dart';
 import 'package:vet_assist/start.dart';
+import 'password_reset.dart'; // Assuming this file exists and contains ResetPasswordPage
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         '/start': (context) => const Start(),
         '/signin': (context) => const SignInScreen(),
         '/login': (context) => const LoginScreen(),
-        // '/profile': (context) => const
+        '/reset_password': (context) => const ResetPasswordPage(),
       },
       home: const Splash(),
     );
