@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'password_updated.dart'; // Assuming this file contains PasswordUpdatedPage
 
 class ResetPasswordPage extends StatelessWidget {
   const ResetPasswordPage({super.key});
@@ -32,10 +33,34 @@ class ResetPasswordPage extends StatelessWidget {
               const SizedBox(height: 20),
               TextField(
                 obscureText: true,
-                decoration: inputDecoration.copyWith(
-                  hintText: 'Confirm Password',
-                ),
+                decoration: inputDecoration.copyWith(hintText: 'Confirm Password'),
                 style: const TextStyle(color: Colors.white),
+              ),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to Password Updated screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PasswordUpdatedPage(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF007C85),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40.0,
+                    vertical: 14.0,
+                  ),
+                ),
+                child: const Text(
+                  'Update Password',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
