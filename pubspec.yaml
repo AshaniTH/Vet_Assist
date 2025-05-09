@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^2.1.0
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -26,3 +27,6 @@ flutter:
     - images/bot.png
     - images/location.png
     - images/pngwing.com (68).png
+    - assest/
+    - assest/icons/google.svg
+    - assest/icons/fb.svg

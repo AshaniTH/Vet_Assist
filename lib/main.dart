@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'password_reset.dart';
+import 'package:vet_assist/login.dart';
+import 'package:vet_assist/signin.dart';
+import 'package:vet_assist/splash.dart';
+import 'package:vet_assist/start.dart';
+import 'password_reset.dart'; // Assuming this file defines ResetPasswordPage
 
 void main() {
   runApp(const MyApp());
@@ -10,9 +14,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ResetPasswordPage(),
+      routes: {
+        '/splash': (context) => const Splash(),
+        '/start': (context) => const Start(),
+        '/signin': (context) => const SignInScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/reset_password': (context) => const ResetPasswordPage(),
+      },
+      home: const Splash(), // Change to ResetPasswordPage() for testing if needed
     );
   }
 }
