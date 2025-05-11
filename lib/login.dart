@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/gestures.dart';
+import 'package:vet_assist/password_reset.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -94,13 +95,19 @@ class LoginScreen extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    // Handle forgot password
-                    Navigator.pushNamed(context, '/forgot-password');
+                    // Navigation to password reset page
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ResetPasswordPage(),
+                      ),
+                    );
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
+
                   child: Text(
                     'Forgot Password?',
                     style: TextStyle(
