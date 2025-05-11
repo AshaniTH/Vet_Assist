@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "354507081615",
+    "project_id": "vetassist-2d5f8",
+    "storage_bucket": "vetassist-2d5f8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354507081615:android:dd62ffdd6616dd5b76adfa",
+        "android_client_info": {
+          "package_name": "com.example.vet_assist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmHgl2Fi2MzbiTKaZL5n0PkcpE4p5b2d8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
