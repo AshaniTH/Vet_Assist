@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:vet_assist/login.dart';
+import 'package:vet_assist/option.dart';
 import 'package:vet_assist/signin.dart';
 import 'package:vet_assist/splash.dart';
 import 'package:vet_assist/start.dart';
@@ -28,8 +30,19 @@ class MyApp extends StatelessWidget {
         '/reset_password': (context) => const ResetPasswordPage(),
         '/verification': (context) => const VerificationPendingPage(),
       },
-      home:
-          const Splash(), // Change to ResetPasswordPage() for testing if needed
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Splash();
+          }
+          if (snapshot.hasData) {
+            final user = snapshot.data!;
+            return user.emailVerified ? HomePage() : VerificationPendingPage();
+          }
+          return const Start();
+        },
+      ), // Change to ResetPasswordPage() for testing if needed
     );
   }
 }
