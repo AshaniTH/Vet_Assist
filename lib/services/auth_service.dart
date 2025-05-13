@@ -7,6 +7,13 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // Sign up with email and password
+  Future<void> sendVerificationEmail() async {
+    final user = _auth.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+  }
+
   Future<User?> signUpWithEmail(
     String email,
     String password,
@@ -20,6 +27,9 @@ class AuthService {
 
       // Update user display name with username
       await result.user?.updateDisplayName(username);
+
+      //send verification email
+      await result.user?.sendEmailVerification();
 
       return result.user;
     } catch (e) {
