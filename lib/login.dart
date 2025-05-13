@@ -102,13 +102,12 @@ class LoginScreen extends StatelessWidget {
                         builder: (context) => const ResetPasswordPage(),
                       ),
                     );
-                    // Handle forgot password
-                    Navigator.pushNamed(context, '/forgot-password')
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
+
                   child: Text(
                     'Forgot Password?',
                     style: TextStyle(
