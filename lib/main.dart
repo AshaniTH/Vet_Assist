@@ -4,6 +4,8 @@ import 'package:vet_assist/login.dart';
 import 'package:vet_assist/signin.dart';
 import 'package:vet_assist/splash.dart';
 import 'package:vet_assist/start.dart';
+import 'package:vet_assist/verification_pending.dart';
+import 'password_reset.dart'; // Assuming this file defines ResetPasswordPage
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +25,11 @@ class MyApp extends StatelessWidget {
         '/start': (context) => const Start(),
         '/signin': (context) => const SignInScreen(),
         '/login': (context) => const LoginScreen(),
-        // '/profile': (context) => const
+        '/reset_password': (context) => const ResetPasswordPage(),
+        '/verification': (context) => const VerificationPendingPage(),
       },
-      home: const Splash(),
+      home:
+          const Splash(), // Change to ResetPasswordPage() for testing if needed
     );
   }
 }
