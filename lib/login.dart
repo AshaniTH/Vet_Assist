@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:vet_assist/forgot_password_email.dart';
 import 'package:vet_assist/password_reset.dart';
 import 'package:vet_assist/option.dart';
 import 'package:vet_assist/services/auth_service.dart';
@@ -242,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ResetPasswordPage(),
+                        builder: (context) => const ForgotPasswordEmailPage(),
                       ),
                     );
                   },

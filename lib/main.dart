@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:vet_assist/forgot_password_email.dart';
 import 'package:vet_assist/login.dart';
 import 'package:vet_assist/option.dart';
 import 'package:vet_assist/signin.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         '/start': (context) => const Start(),
         '/signin': (context) => const SignInScreen(),
         '/login': (context) => const LoginScreen(),
-        '/reset_password': (context) => const ResetPasswordPage(),
+        '/forgot_password': (context) => const ForgotPasswordEmailPage(),
         '/verification': (context) => const VerificationPendingPage(),
       },
       home: StreamBuilder<User?>(

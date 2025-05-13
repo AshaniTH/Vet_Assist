@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vet_assist/option.dart';
 import 'pw_faild.dart'; // Make sure this file has class PwFaildPage
 
 class PasswordUpdatedPage extends StatelessWidget {
@@ -38,11 +39,9 @@ class PasswordUpdatedPage extends StatelessWidget {
               const SizedBox(height: 40),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const PwFaildPage(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -56,7 +55,7 @@ class PasswordUpdatedPage extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Login',
+                  'Continue to home',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
