@@ -37,6 +37,19 @@ class AuthService {
     }
   }
 
+  //login implementation
+  Future<User?> signInWithEmail(String email, String password) async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return credential.user;
+    } on FirebaseAuthException catch (e) {
+      throw e;
+    }
+  }
+
   // Sign in with Google
   Future<User?> signInWithGoogle() async {
     try {

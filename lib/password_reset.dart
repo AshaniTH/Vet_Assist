@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'password_updated.dart'; // Assuming this file contains PasswordUpdatedPage
 
@@ -16,6 +17,7 @@ class ResetPasswordPage extends StatelessWidget {
         borderSide: BorderSide.none,
       ),
     );
+    // In password_reset.dart
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -33,7 +35,9 @@ class ResetPasswordPage extends StatelessWidget {
               const SizedBox(height: 20),
               TextField(
                 obscureText: true,
-                decoration: inputDecoration.copyWith(hintText: 'Confirm Password'),
+                decoration: inputDecoration.copyWith(
+                  hintText: 'Confirm Password',
+                ),
                 style: const TextStyle(color: Colors.white),
               ),
               const SizedBox(height: 40),
