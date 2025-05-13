@@ -1,9 +1,67 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vet_assist/start.dart';
 import 'package:vet_assist/verification_pending.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  //add signout
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // Navigate to start screen after logout
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Start()),
+        (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error signing out: ${e.toString()}')),
+      );
+    }
+  }
+
+  void handleAvatarButton(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.person, color: Color(0xFF219899)),
+                title: const Text('Profile'),
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add navigation to profile page here
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.settings, color: Color(0xFF219899)),
+                title: const Text('Settings'),
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add navigation to settings page here
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout, color: Color(0xFF219899)),
+                title: const Text('Logout'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _signOut(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +76,6 @@ class HomePage extends StatelessWidget {
           ),
         );
       });
-    }
-
-    void handleAvatarButton() {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Profile button tapped!')));
     }
 
     return Scaffold(
@@ -43,7 +95,7 @@ class HomePage extends StatelessWidget {
               shape: const CircleBorder(),
               child: InkWell(
                 customBorder: const CircleBorder(),
-                onTap: handleAvatarButton,
+                onTap: () => handleAvatarButton(context),
                 child: CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.grey[300],
