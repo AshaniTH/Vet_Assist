@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/gestures.dart';
 import 'package:vet_assist/services/auth_service.dart';
+import 'package:vet_assist/verification_pending.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -45,7 +46,12 @@ class _SignInScreenState extends State<SignInScreen> {
       );
 
       if (user != null && mounted) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const VerificationPendingPage(),
+          ),
+        );
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
