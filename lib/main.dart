@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/forgot_password': (context) => const ForgotPasswordEmailPage(),
         '/verification': (context) => const VerificationPendingPage(),
+        '/I updated my password': (context) => const LoginScreen(),
       },
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
