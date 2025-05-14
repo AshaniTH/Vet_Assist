@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:vet_assist/password_reset.dart';
+import 'login.dart';
 
 class ForgotPasswordEmailPage extends StatefulWidget {
   const ForgotPasswordEmailPage({super.key});
@@ -12,34 +12,44 @@ class ForgotPasswordEmailPage extends StatefulWidget {
 
 class _ForgotPasswordEmailPageState extends State<ForgotPasswordEmailPage> {
   final _emailController = TextEditingController();
-  final _codeController = TextEditingController();
-  bool _showCodeField = false;
+  final _passwordController = TextEditingController();
+
   bool _isLoading = false;
+  bool _emailSent = false;
+  bool _verifying = false;
   String? _errorMessage;
+  String? _userEmail;
 
   @override
   void dispose() {
     _emailController.dispose();
-    _codeController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _sendVerificationCode() async {
+  Future<void> _sendPasswordResetEmail() async {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
     });
 
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: _emailController.text.trim(),
-      );
+      final email = _emailController.text.trim();
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 
-      // For demo, we'll show the code field
-      // In production, Firebase sends the reset link directly
       setState(() {
-        _showCodeField = true;
+        _emailSent = true;
+        _userEmail = email;
       });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Password reset email sent! Check your inbox.'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMessage = _getErrorMessage(e.code);
@@ -51,41 +61,54 @@ class _ForgotPasswordEmailPageState extends State<ForgotPasswordEmailPage> {
     }
   }
 
-  Future<void> _verifyCodeAndNavigate() async {
+  Future<void> _navigateToLoginWithDelay() async {
+    setState(() => _isLoading = true);
+    await Future.delayed(const Duration(seconds: 3));
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder:
+              (context) => const LoginScreen(showPasswordResetSuccess: true),
+        ),
+      );
+    }
+  }
+
+  Future<void> _verifyPasswordUpdate() async {
+    if (_userEmail == null || _passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = 'Enter the new password to verify update.';
+      });
+      return;
+    }
+
     setState(() {
-      _isLoading = true;
+      _verifying = true;
       _errorMessage = null;
     });
 
     try {
-      // In a real app, you would verify the code with your backend
-      // For demo, we'll just check if it's 4 digits
-      if (_codeController.text.length == 4) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder:
-                (context) => ResetPasswordPage(
-                  email: _emailController.text.trim(),
-                  verificationCode: _codeController.text.trim(),
-                ),
+      // Try signing in with the new password
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _userEmail!,
+        password: _passwordController.text,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Password verified successfully!'),
+            backgroundColor: Colors.green,
           ),
         );
-      } else {
-        setState(() {
-          _errorMessage = 'Please enter a valid 4-digit code';
-        });
       }
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMessage = 'Verification failed. Please try again.';
+        _errorMessage = _getErrorMessage(e.code);
       });
     } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      setState(() => _verifying = false);
     }
   }
 
@@ -95,6 +118,8 @@ class _ForgotPasswordEmailPageState extends State<ForgotPasswordEmailPage> {
         return 'No user found with this email address';
       case 'invalid-email':
         return 'Please enter a valid email address';
+      case 'wrong-password':
+        return 'Incorrect password. Try again or wait for reset.';
       default:
         return 'An error occurred. Please try again.';
     }
@@ -111,21 +136,32 @@ class _ForgotPasswordEmailPageState extends State<ForgotPasswordEmailPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Forgot Password',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF007C85),
+                    color: Color(0xFF007C85),
                   ),
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Enter your email for the verification process. '
-                  'We will send a code to your email',
+                  _emailSent
+                      ? 'We sent a password reset link to:'
+                      : 'Enter your email to receive a password reset link',
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 16),
                 ),
+                if (_emailSent) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    _userEmail ?? '',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 30),
 
                 if (_errorMessage != null)
@@ -137,7 +173,7 @@ class _ForgotPasswordEmailPageState extends State<ForgotPasswordEmailPage> {
                     ),
                   ),
 
-                if (!_showCodeField) ...[
+                if (!_emailSent) ...[
                   TextField(
                     controller: _emailController,
                     decoration: const InputDecoration(
@@ -151,9 +187,10 @@ class _ForgotPasswordEmailPageState extends State<ForgotPasswordEmailPage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _sendVerificationCode,
+                      onPressed: _isLoading ? null : _sendPasswordResetEmail,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF007C85),
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child:
@@ -161,61 +198,86 @@ class _ForgotPasswordEmailPageState extends State<ForgotPasswordEmailPage> {
                               ? const CircularProgressIndicator(
                                 color: Colors.white,
                               )
-                              : const Text('Send Code'),
+                              : const Text('Send Reset Link'),
                     ),
                   ),
                 ] else ...[
-                  Text(
-                    'Enter 4 digit code',
-                    style: const TextStyle(fontSize: 18),
+                  const SizedBox(height: 30),
+                  const Icon(
+                    Icons.mark_email_unread_outlined,
+                    size: 60,
+                    color: Color(0xFF007C85),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'A four digit code should have come to your email address',
+                  const SizedBox(height: 30),
+                  const Text(
+                    'Please check your email and follow the instructions to reset your password',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 16),
                   ),
+                  const SizedBox(height: 40),
+
+                  // I have updated password (with delay)
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _navigateToLoginWithDelay,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF007C85),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child:
+                          _isLoading
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text('I have updated my password'),
+                    ),
+                  ),
+
                   const SizedBox(height: 20),
+
+                  // Optional password verification
                   TextField(
-                    controller: _codeController,
+                    controller: _passwordController,
+                    obscureText: true,
                     decoration: const InputDecoration(
-                      labelText: 'Verification Code',
+                      labelText: 'Enter new password to verify',
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
                     ),
-                    keyboardType: TextInputType.number,
-                    maxLength: 4,
                   ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _verifying ? null : _verifyPasswordUpdate,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 2, 84, 99),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child:
+                          _verifying
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text('Verify Password Update'),
+                    ),
+                  ),
+
                   const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: () {
-                            setState(() {
-                              _showCodeField = false;
-                            });
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: _isLoading ? null : _verifyCodeAndNavigate,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF007C85),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                          ),
-                          child:
-                              _isLoading
-                                  ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                  : const Text('Confirm'),
-                        ),
-                      ),
-                    ],
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _emailSent = false;
+                        _userEmail = null;
+                      });
+                    },
+                    child: const Text(
+                      'Back to email entry',
+                      style: TextStyle(color: Color(0xFF007C85)),
+                    ),
                   ),
                 ],
               ],

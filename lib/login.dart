@@ -9,7 +9,8 @@ import 'package:vet_assist/services/auth_service.dart';
 import 'package:vet_assist/verification_pending.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final bool showPasswordResetSuccess;
+  const LoginScreen({super.key, this.showPasswordResetSuccess = false});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -22,6 +23,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isLoading = false;
   String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    // Show success message if coming from password reset
+    if (widget.showPasswordResetSuccess) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Password updated successfully! You can now login with your new password',
+            ),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 4),
+          ),
+        );
+      });
+    }
+  }
 
   @override
   void dispose() {
