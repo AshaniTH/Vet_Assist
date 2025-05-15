@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vet_assist/forgot_password_email.dart';
-import 'package:vet_assist/password_reset.dart';
 import 'package:vet_assist/option.dart';
 import 'package:vet_assist/services/auth_service.dart';
 import 'package:vet_assist/verification_pending.dart';

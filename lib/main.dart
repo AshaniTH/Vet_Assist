@@ -8,7 +8,6 @@ import 'package:vet_assist/signin.dart';
 import 'package:vet_assist/splash.dart';
 import 'package:vet_assist/start.dart';
 import 'package:vet_assist/verification_pending.dart';
-import 'password_reset.dart'; // Assuming this file defines ResetPasswordPage
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
