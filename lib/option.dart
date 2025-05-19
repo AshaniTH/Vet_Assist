@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vet_assist/pet_profile/pet_profile_home.dart';
 import 'package:vet_assist/start.dart';
+import 'package:vet_assist/user_profile/user_profile_page.dart';
+import 'package:vet_assist/user_profile/user_profile_summary.dart';
 import 'package:vet_assist/verification_pending.dart';
 
 class HomePage extends StatelessWidget {
@@ -33,11 +35,19 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              UserProfileSummary(),
+
               ListTile(
                 leading: const Icon(Icons.person, color: Color(0xFF219899)),
                 title: const Text('Profile'),
                 onTap: () {
                   Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UserProfilePage(),
+                    ),
+                  );
                   // Add navigation to profile page here
                 },
               ),
