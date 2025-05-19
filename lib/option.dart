@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vet_assist/pet_profile/pet_profile_home.dart';
 import 'package:vet_assist/start.dart';
 import 'package:vet_assist/verification_pending.dart';
 
@@ -121,7 +122,14 @@ class HomePage extends StatelessWidget {
                 color: const Color(0xFF219899),
                 textColor: Colors.white,
                 shadow: false,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PetProfileHomePage(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 18),
               FeatureCard(

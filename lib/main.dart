@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:vet_assist/forgot_password_email.dart';
 import 'package:vet_assist/login.dart';
 import 'package:vet_assist/option.dart';
+import 'package:vet_assist/pet_profile/pet_profile_create.dart';
+import 'package:vet_assist/pet_profile/pet_profile_home.dart';
 import 'package:vet_assist/signin.dart';
 import 'package:vet_assist/splash.dart';
 import 'package:vet_assist/start.dart';
@@ -30,6 +32,11 @@ class MyApp extends StatelessWidget {
         '/forgot_password': (context) => const ForgotPasswordEmailPage(),
         '/verification': (context) => const VerificationPendingPage(),
         '/I updated my password': (context) => const LoginScreen(),
+
+        '/pet_profile_home': (context) => const PetProfileHomePage(),
+        '/pet_profile_create':
+            (context) => const PetProfileCreatePage(petType: ''),
+        '/option': (context) => const HomePage(),
       },
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
