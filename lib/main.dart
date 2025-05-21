@@ -12,6 +12,7 @@ import 'package:vet_assist/signin.dart';
 import 'package:vet_assist/splash.dart';
 import 'package:vet_assist/start.dart';
 import 'package:vet_assist/verification_pending.dart';
+import 'package:vet_assist/nearby_vets.dart'; // ✅ Import the nearby vet page
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
           return PetProfileCreatePage(petType: args['petType']);
         },
         '/option': (context) => const HomePage(),
+        '/nearby_vets': (context) => NearbyVetHospitalsPage(), // ✅ Add route
       },
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -59,7 +61,7 @@ class MyApp extends StatelessWidget {
           }
           return const Start();
         },
-      ), // Change to ResetPasswordPage() for testing if needed
+      ),
     );
   }
 }

@@ -24,7 +24,7 @@ class _StartState extends State<Start> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
-                      'assest/cat and dog.png',
+                      'images/doggy and cat 1 (1).png',
                       height: 180,
                       width: 180,
                       fit: BoxFit.cover,

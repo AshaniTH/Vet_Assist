@@ -40,11 +40,40 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  //add signout
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String? _userName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  //add sign out
+  Future<void> _loadUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final doc =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+    if (doc.exists && doc.data()?['fullName'] != null) {
+      setState(() {
+        _userName = doc.data()?['fullName'];
+      });
+    }
+  }
+
   Future<void> _signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
-      // Navigate to start screen after logout
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const Start()),
@@ -86,7 +115,6 @@ class _HomePageState extends State<HomePage> {
                 title: const Text('Settings'),
                 onTap: () {
                   Navigator.pop(context);
-                  // Add navigation to settings page here
                 },
               ),
               ListTile(
@@ -106,7 +134,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Check if user is verified when building the home page
     final user = FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -168,59 +195,61 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 50),
-              FeatureCard(
-                iconPath: 'images/baluadiya.png',
-                title: 'Pet Profile',
-                subtitle: "All your pet's details in one place!",
-                color: const Color(0xFF219899),
-                textColor: Colors.white,
-                shadow: false,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PetListPage(),
-                    ),
-                  );
-                },
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 24),
+                  FeatureCard(
+                    iconPath: 'images/baluadiya.png',
+                    title: 'Pet Profile',
+                    subtitle: "All your pet's details in one place!",
+                    color: const Color(0xFF219899),
+                    textColor: Colors.white,
+                    shadow: false,
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 18),
+                  FeatureCard(
+                    iconPath: 'images/bot.png',
+                    title: 'Vet Assist\nChat bot',
+                    subtitle: 'Smart vet chatbot care made easy!',
+                    color: Colors.white,
+                    textColor: const Color(0xFF219899),
+                    shadow: true,
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 18),
+                  FeatureCard(
+                    iconPath: 'images/book.png',
+                    title: 'E clinic\nbook',
+                    subtitle: 'Your go-to guide for pet health!',
+                    color: const Color(0xFF219899),
+                    textColor: Colors.white,
+                    shadow: false,
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 18),
+                  FeatureCard(
+                    iconPath: 'images/location.png',
+                    title: 'Near by\nClinic',
+                    subtitle: 'Locate the best vets near you!',
+                    color: Colors.white,
+                    textColor: const Color(0xFF219899),
+                    shadow: true,
+                    onTap: () {
+                      Navigator.pushNamed(context, '/nearby_vets');
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                ],
               ),
-              const SizedBox(height: 18),
-              FeatureCard(
-                iconPath: 'images/bot.png',
-                title: 'Vet Assist\nChat bot',
-                subtitle: 'Smart vet chatbot care made easy!',
-                color: Colors.white,
-                textColor: const Color(0xFF219899),
-                shadow: true,
-                onTap: () {},
-              ),
-              const SizedBox(height: 18),
-              FeatureCard(
-                iconPath: 'images/book.png',
-                title: 'E clinic\nbook',
-                subtitle: 'Your go-to guide for pet health!',
-                color: const Color(0xFF219899),
-                textColor: Colors.white,
-                shadow: false,
-                onTap: () {},
-              ),
-              const SizedBox(height: 18),
-              FeatureCard(
-                iconPath: 'images/location.png',
-                title: 'Near by\nClinic',
-                subtitle: 'Locate the best vets near you!',
-                color: Colors.white,
-                textColor: const Color(0xFF219899),
-                shadow: true,
-                onTap: () {},
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -254,68 +283,69 @@ class FeatureCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Set a fixed height for all cards to keep them the same size
-    return SizedBox(
-      height: 110, // Adjust as needed for your design
-      child: Material(
-        color: color,
-        borderRadius: BorderRadius.circular(24),
-        elevation: shadow ? 8 : 0,
-        shadowColor: Colors.black26,
-        child: InkWell(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 130, maxWidth: 500),
+        child: Material(
+          color: color,
           borderRadius: BorderRadius.circular(24),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 18.0,
-              horizontal: 18.0,
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 54,
-                  height: 54,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(16),
+          elevation: shadow ? 8 : 0,
+          shadowColor: Colors.black26,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(24),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 18.0,
+                horizontal: 18.0,
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 54,
+                    height: 54,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Image.asset(
+                      iconPath,
+                      width: 44,
+                      height: 44,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                  child: Image.asset(
-                    iconPath,
-                    width: 44,
-                    height: 44,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                const SizedBox(width: 18),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment:
-                        MainAxisAlignment.center, // Center text vertically
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                          height: 1.1,
+                  const SizedBox(width: 18),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            color: textColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            height: 1.1,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          color: textColor.withOpacity(0.87),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          height: 1.2,
+                        const SizedBox(height: 6),
+                        Text(
+                          subtitle,
+                          style: TextStyle(
+                            color: textColor.withOpacity(0.87),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 1.2,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
