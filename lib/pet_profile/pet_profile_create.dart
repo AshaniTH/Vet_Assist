@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:vet_assist/pet_profile/pet_list_page.dart';
+import 'package:vet_assist/pet_profile/pet_model.dart';
+import 'package:vet_assist/pet_profile/pet_service.dart';
 
 class PetProfileCreatePage extends StatefulWidget {
   final String petType;
@@ -46,14 +50,56 @@ class _PetProfileCreatePageState extends State<PetProfileCreatePage> {
     }
   }
 
-  void _createPetProfile() {
-    if (_formKey.currentState!.validate()) {
-      // Save pet profile logic here
-      Navigator.pop(context);
+  Future<void> _createPetProfile() async {
+    if (_formKey.currentState!.validate() &&
+        _selectedDate != null &&
+        _selectedGender != null) {
+      try {
+        final pet = Pet(
+          userId: '', // Will be set by PetService
+          name: _nameController.text,
+          type: widget.petType,
+          gender: _selectedGender!,
+          dob: _selectedDate!,
+          breed: _breedController.text.isEmpty ? null : _breedController.text,
+          weight:
+              _weightController.text.isEmpty
+                  ? null
+                  : double.tryParse(_weightController.text),
+          color: _colorController.text.isEmpty ? null : _colorController.text,
+          birthdayReminder: _birthdayReminder,
+          weightReminder: _weightReminder,
+          vaccinationReminder: _vaccinationReminder,
+        );
+
+        final petService = Provider.of<PetService>(context, listen: false);
+        await petService.addPetProfile(pet);
+
+        // Navigate back to PetListPage
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const PetListPage()),
+          (Route<dynamic> route) => false,
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Pet profile created successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to create pet profile: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Pet profile created successfully!'),
-          backgroundColor: Colors.green,
+          content: Text('Please fill all required fields'),
+          backgroundColor: Colors.red,
         ),
       );
     }
@@ -66,6 +112,8 @@ class _PetProfileCreatePageState extends State<PetProfileCreatePage> {
       appBar: AppBar(
         title: Text('Add ${widget.petType} Profile'),
         backgroundColor: const Color(0xFF219899),
+        foregroundColor: Colors.white,
+
         elevation: 0,
       ),
       body: SingleChildScrollView(

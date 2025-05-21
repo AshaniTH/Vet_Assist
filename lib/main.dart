@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vet_assist/forgot_password_email.dart';
 import 'package:vet_assist/login.dart';
 import 'package:vet_assist/option.dart';
 import 'package:vet_assist/pet_profile/pet_profile_create.dart';
 import 'package:vet_assist/pet_profile/pet_profile_home.dart';
+import 'package:vet_assist/pet_profile/pet_service.dart';
 import 'package:vet_assist/signin.dart';
 import 'package:vet_assist/splash.dart';
 import 'package:vet_assist/start.dart';
@@ -14,7 +16,12 @@ import 'package:vet_assist/verification_pending.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [Provider(create: (_) => PetService())],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -34,8 +41,10 @@ class MyApp extends StatelessWidget {
         '/I updated my password': (context) => const LoginScreen(),
 
         '/pet_profile_home': (context) => const PetProfileHomePage(),
-        '/pet_profile_create':
-            (context) => const PetProfileCreatePage(petType: ''),
+        '/pet_profile_create': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map;
+          return PetProfileCreatePage(petType: args['petType']);
+        },
         '/option': (context) => const HomePage(),
       },
       home: StreamBuilder<User?>(

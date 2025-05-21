@@ -11,6 +11,7 @@ class PetProfileHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Pet Profile'),
         backgroundColor: const Color(0xFF219899),
+        foregroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
