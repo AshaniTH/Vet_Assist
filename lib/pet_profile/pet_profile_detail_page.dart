@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:vet_assist/pet_profile/pet_model.dart';
+import 'package:vet_assist/pet_profile/pet_profile_edit.dart';
 import 'package:vet_assist/pet_profile/pet_service.dart';
 
 class PetProfileDetailPage extends StatefulWidget {
@@ -61,7 +62,12 @@ class _PetProfileDetailPageState extends State<PetProfileDetailPage> {
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
-              // Navigate to edit page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PetProfileEditPage(pet: _currentPet),
+                ),
+              );
             },
           ),
         ],
