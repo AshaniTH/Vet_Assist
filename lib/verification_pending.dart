@@ -35,9 +35,7 @@ class _VerificationPendingPageState extends State<VerificationPendingPage> {
     final updatedUser = FirebaseAuth.instance.currentUser;
 
     if (updatedUser?.emailVerified ?? false) {
-      setState(() {
-        _isVerified = true;
-      });
+      setState(() {});
       if (mounted) {
         Navigator.pushReplacement(
           context,
