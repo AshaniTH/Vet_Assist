@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vet_assist/pet_profile/pet_list_page.dart';
@@ -6,8 +7,38 @@ import 'package:vet_assist/user_profile/user_profile_page.dart';
 import 'package:vet_assist/user_profile/user_profile_summary.dart';
 import 'package:vet_assist/verification_pending.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String? _userName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final doc =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+    if (doc.exists && doc.data()?['fullName'] != null) {
+      setState(() {
+        _userName = doc.data()?['fullName'];
+      });
+    }
+  }
 
   //add signout
   Future<void> _signOut(BuildContext context) async {
@@ -47,8 +78,7 @@ class HomePage extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => const UserProfilePage(),
                     ),
-                  );
-                  // Add navigation to profile page here
+                  ).then((_) => _loadUserData());
                 },
               ),
               ListTile(
@@ -94,6 +124,25 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFF219899),
         elevation: 0,
+        title:
+            _userName != null
+                ? Text(
+                  'Hi, $_userName!',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+                : const Text(
+                  'Welcome!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.white, size: 32),
           onPressed: () {},
