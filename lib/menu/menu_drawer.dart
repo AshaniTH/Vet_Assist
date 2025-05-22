@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vet_assist/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:vet_assist/pet_profile/pet_list_page.dart';
 import 'package:vet_assist/pet_profile/pet_profile_home.dart';
 import 'package:vet_assist/user_profile/user_profile_page.dart';
 
@@ -64,9 +65,7 @@ class MenuDrawer extends StatelessWidget {
               Navigator.pop(context);
               var push = Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const PetProfileHomePage(),
-                ),
+                MaterialPageRoute(builder: (context) => const PetListPage()),
               );
             },
           ),
