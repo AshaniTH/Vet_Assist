@@ -1,12 +1,46 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vet_assist/nearby_vets.dart';
+import 'package:vet_assist/pet_profile/pet_list_page.dart';
 import 'package:vet_assist/start.dart';
+import 'package:vet_assist/user_profile/user_profile_page.dart';
+import 'package:vet_assist/user_profile/user_profile_summary.dart';
 import 'package:vet_assist/verification_pending.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
-  //add signout
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String? _userName;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final doc =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+
+    if (doc.exists && doc.data()?['fullName'] != null) {
+      setState(() {
+        _userName = doc.data()?['fullName'];
+      });
+    }
+  }
+
   Future<void> _signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -32,12 +66,20 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              UserProfileSummary(),
               ListTile(
                 leading: const Icon(Icons.person, color: Color(0xFF219899)),
                 title: const Text('Profile'),
                 onTap: () {
                   Navigator.pop(context);
-                  // Add navigation to profile page here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UserProfilePage(),
+                    ),
+                  ).then(
+                    (_) => _loadUserData(),
+                  ); // Refresh name after profile update
                 },
               ),
               ListTile(
@@ -83,6 +125,24 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFF219899),
         elevation: 0,
+        title:
+            _userName != null
+                ? Text(
+                  'Hi, $_userName!',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+                : const Text(
+                  'Welcome!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.white, size: 32),
           onPressed: () {},
@@ -121,7 +181,14 @@ class HomePage extends StatelessWidget {
                 color: const Color(0xFF219899),
                 textColor: Colors.white,
                 shadow: false,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PetListPage(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 18),
               FeatureCard(
@@ -151,7 +218,14 @@ class HomePage extends StatelessWidget {
                 color: Colors.white,
                 textColor: const Color(0xFF219899),
                 shadow: true,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NearbyVetHospitalsPage(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -187,68 +261,69 @@ class FeatureCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Set a fixed height for all cards to keep them the same size
-    return SizedBox(
-      height: 110, // Adjust as needed for your design
-      child: Material(
-        color: color,
-        borderRadius: BorderRadius.circular(24),
-        elevation: shadow ? 8 : 0,
-        shadowColor: Colors.black26,
-        child: InkWell(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 130, maxWidth: 500),
+        child: Material(
+          color: color,
           borderRadius: BorderRadius.circular(24),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 18.0,
-              horizontal: 18.0,
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 54,
-                  height: 54,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(16),
+          elevation: shadow ? 8 : 0,
+          shadowColor: Colors.black26,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(24),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 18.0,
+                horizontal: 18.0,
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 54,
+                    height: 54,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Image.asset(
+                      iconPath,
+                      width: 44,
+                      height: 44,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                  child: Image.asset(
-                    iconPath,
-                    width: 44,
-                    height: 44,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                const SizedBox(width: 18),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment:
-                        MainAxisAlignment.center, // Center text vertically
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22,
-                          height: 1.1,
+                  const SizedBox(width: 18),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            color: textColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            height: 1.1,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          color: textColor.withOpacity(0.87),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          height: 1.2,
+                        const SizedBox(height: 6),
+                        Text(
+                          subtitle,
+                          style: TextStyle(
+                            color: textColor.withOpacity(0.87),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 1.2,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
