@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vet_assist/nearby_vets.dart';
 import 'package:vet_assist/pet_profile/pet_list_page.dart';
 import 'package:vet_assist/start.dart';
 import 'package:vet_assist/user_profile/user_profile_page.dart';
@@ -40,40 +41,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  String? _userName;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  //add sign out
-  Future<void> _loadUserData() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-
-    final doc =
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
-
-    if (doc.exists && doc.data()?['fullName'] != null) {
-      setState(() {
-        _userName = doc.data()?['fullName'];
-      });
-    }
-  }
-
   Future<void> _signOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
+      // Navigate to start screen after logout
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const Start()),
@@ -96,7 +67,6 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               UserProfileSummary(),
-
               ListTile(
                 leading: const Icon(Icons.person, color: Color(0xFF219899)),
                 title: const Text('Profile'),
@@ -107,7 +77,9 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(
                       builder: (context) => const UserProfilePage(),
                     ),
-                  ).then((_) => _loadUserData());
+                  ).then(
+                    (_) => _loadUserData(),
+                  ); // Refresh name after profile update
                 },
               ),
               ListTile(
@@ -115,6 +87,7 @@ class _HomePageState extends State<HomePage> {
                 title: const Text('Settings'),
                 onTap: () {
                   Navigator.pop(context);
+                  // Add navigation to settings page here
                 },
               ),
               ListTile(
@@ -134,6 +107,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Check if user is verified when building the home page
     final user = FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -169,7 +143,6 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.white, size: 32),
           onPressed: () {},
@@ -195,61 +168,66 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 24),
-                  FeatureCard(
-                    iconPath: 'images/baluadiya.png',
-                    title: 'Pet Profile',
-                    subtitle: "All your pet's details in one place!",
-                    color: const Color(0xFF219899),
-                    textColor: Colors.white,
-                    shadow: false,
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 18),
-                  FeatureCard(
-                    iconPath: 'images/bot.png',
-                    title: 'Vet Assist\nChat bot',
-                    subtitle: 'Smart vet chatbot care made easy!',
-                    color: Colors.white,
-                    textColor: const Color(0xFF219899),
-                    shadow: true,
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 18),
-                  FeatureCard(
-                    iconPath: 'images/book.png',
-                    title: 'E clinic\nbook',
-                    subtitle: 'Your go-to guide for pet health!',
-                    color: const Color(0xFF219899),
-                    textColor: Colors.white,
-                    shadow: false,
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 18),
-                  FeatureCard(
-                    iconPath: 'images/location.png',
-                    title: 'Near by\nClinic',
-                    subtitle: 'Locate the best vets near you!',
-                    color: Colors.white,
-                    textColor: const Color(0xFF219899),
-                    shadow: true,
-                    onTap: () {
-                      Navigator.pushNamed(context, '/nearby_vets');
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 50),
+              FeatureCard(
+                iconPath: 'images/baluadiya.png',
+                title: 'Pet Profile',
+                subtitle: "All your pet's details in one place!",
+                color: const Color(0xFF219899),
+                textColor: Colors.white,
+                shadow: false,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PetListPage(),
+                    ),
+                  );
+                },
               ),
-            ),
+              const SizedBox(height: 18),
+              FeatureCard(
+                iconPath: 'images/bot.png',
+                title: 'Vet Assist\nChat bot',
+                subtitle: 'Smart vet chatbot care made easy!',
+                color: Colors.white,
+                textColor: const Color(0xFF219899),
+                shadow: true,
+                onTap: () {},
+              ),
+              const SizedBox(height: 18),
+              FeatureCard(
+                iconPath: 'images/book.png',
+                title: 'E clinic\nbook',
+                subtitle: 'Your go-to guide for pet health!',
+                color: const Color(0xFF219899),
+                textColor: Colors.white,
+                shadow: false,
+                onTap: () {},
+              ),
+              const SizedBox(height: 18),
+              FeatureCard(
+                iconPath: 'images/location.png',
+                title: 'Near by\nClinic',
+                subtitle: 'Locate the best vets near you!',
+                color: Colors.white,
+                textColor: const Color(0xFF219899),
+                shadow: true,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NearbyVetHospitalsPage(),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ),
       ),
