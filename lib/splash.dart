@@ -15,6 +15,11 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   late Animation<double> _progress;
 
   @override
+  void dispose() {
+    _controller.dispose(); // Dispose the controller before super.dispose()
+    super.dispose();
+  }
+
   void initState() {
     super.initState();
     _navigatetohome();
@@ -39,8 +44,11 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   }
 
   _navigatetohome() async {
-    await Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/start');
+    await Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        // Check if widget is still mounted
+        Navigator.pushReplacementNamed(context, '/start');
+      }
     });
   }
 
