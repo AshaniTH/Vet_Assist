@@ -8,7 +8,11 @@ import 'package:vet_assist/start.dart';
 import 'package:vet_assist/user_profile/user_profile_page.dart';
 import 'package:vet_assist/user_profile/user_profile_summary.dart';
 import 'package:vet_assist/verification_pending.dart';
+<<<<<<< Updated upstream
 import 'package:vet_assist/menu_drawer.dart';
+=======
+import 'package:vet_assist/chat_screen.dart'; // ✅ Import chatbot screen
+>>>>>>> Stashed changes
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -73,6 +77,7 @@ class _HomePageState extends State<HomePage> {
               ListTile(
                 leading: const Icon(Icons.person, color: Color(0xFF219899)),
                 title: const Text('Profile'),
+<<<<<<< Updated upstream
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -84,14 +89,21 @@ class _HomePageState extends State<HomePage> {
                     (_) => _loadUserData(),
                   ); // Refresh name after profile update
                 },
+=======
+                onTap: () => Navigator.pop(context),
+>>>>>>> Stashed changes
               ),
               ListTile(
                 leading: const Icon(Icons.settings, color: Color(0xFF219899)),
                 title: const Text('Settings'),
+<<<<<<< Updated upstream
                 onTap: () {
                   Navigator.pop(context);
                   // Add navigation to settings page here
                 },
+=======
+                onTap: () => Navigator.pop(context),
+>>>>>>> Stashed changes
               ),
               ListTile(
                 leading: const Icon(Icons.logout, color: Color(0xFF219899)),
@@ -175,6 +187,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+<<<<<<< Updated upstream
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: SingleChildScrollView(
@@ -196,6 +209,66 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 },
+=======
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 24),
+                  FeatureCard(
+                    iconPath: 'images/baluadiya.png',
+                    title: 'Pet Profile',
+                    subtitle: "All your pet's details in one place!",
+                    color: const Color(0xFF219899),
+                    textColor: Colors.white,
+                    shadow: false,
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 18),
+                  FeatureCard(
+                    iconPath: 'images/bot.png',
+                    title: 'Vet Assist\nChat bot',
+                    subtitle: 'Smart vet chatbot care made easy!',
+                    color: Colors.white,
+                    textColor: const Color(0xFF219899),
+                    shadow: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ChatScreen()),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 18),
+                  FeatureCard(
+                    iconPath: 'images/book.png',
+                    title: 'E clinic\nbook',
+                    subtitle: 'Your go-to guide for pet health!',
+                    color: const Color(0xFF219899),
+                    textColor: Colors.white,
+                    shadow: false,
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 18),
+                  FeatureCard(
+                    iconPath: 'images/location.png',
+                    title: 'Near by\nClinic',
+                    subtitle: 'Locate the best vets near you!',
+                    color: Colors.white,
+                    textColor: const Color(0xFF219899),
+                    shadow: true,
+                    onTap: () {
+                      Navigator.pushNamed(context, '/nearby_vets');
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                ],
+>>>>>>> Stashed changes
               ),
               const SizedBox(height: 18),
               FeatureCard(

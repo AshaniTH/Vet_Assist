@@ -5,6 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 class NearbyVetHospitalsPage extends StatefulWidget {
+  const NearbyVetHospitalsPage({super.key});
+
   @override
   _NearbyVetHospitalsPageState createState() => _NearbyVetHospitalsPageState();
 }
