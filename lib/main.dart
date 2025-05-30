@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vet_assist/e_clinic_book/vaccination/vaccination_service.dart';
 import 'package:vet_assist/forgot_password_email.dart';
 import 'package:vet_assist/login.dart';
 import 'package:vet_assist/option.dart';
@@ -19,7 +20,10 @@ Future<void> main() async {
   await Firebase.initializeApp();
   runApp(
     MultiProvider(
-      providers: [Provider(create: (_) => PetService())],
+      providers: [
+        Provider(create: (_) => PetService()),
+        Provider(create: (_) => VaccinationService()),
+      ],
       child: const MyApp(),
     ),
   );
