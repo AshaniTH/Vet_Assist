@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vet_assist/e_clinic_book/e_clinic_book_home.dart';
 import 'package:vet_assist/menu/menu_drawer.dart';
 import 'package:vet_assist/nearby_vets.dart';
 import 'package:vet_assist/pet_profile/pet_list_page.dart';
@@ -215,7 +216,14 @@ class _HomePageState extends State<HomePage> {
                 color: const Color(0xFF219899),
                 textColor: Colors.white,
                 shadow: false,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EClinicHomePage(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 18),
               FeatureCard(
