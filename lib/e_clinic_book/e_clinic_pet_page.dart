@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vet_assist/e_clinic_book/vaccination/vaccination_list.dart';
+import 'package:vet_assist/e_clinic_book/weight/weight_list.dart';
 import 'package:vet_assist/pet_profile/pet_model.dart';
 
 class EClinicPetPage extends StatelessWidget {
@@ -44,7 +45,12 @@ class EClinicPetPage extends StatelessWidget {
                     icon: Icons.monitor_weight,
                     title: 'Weight\nTracker',
                     onTap: () {
-                      // TODO: Implement weight tracker navigation
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WeightListPage(pet: pet),
+                        ),
+                      );
                     },
                   ),
                   _buildFeatureCard(
