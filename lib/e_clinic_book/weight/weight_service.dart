@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:vet_assist/e_clinic_book/models/weight_model.dart';
+import 'package:vet_assist/e_clinic_book/weight/weight_model.dart';
 
 class WeightService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
