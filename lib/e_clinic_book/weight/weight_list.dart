@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vet_assist/e_clinic_book/models/weight_model.dart';
-import 'package:vet_assist/e_clinic_book/services/weight_service.dart';
+import 'package:vet_assist/e_clinic_book/weight/weight_model.dart';
+import 'package:vet_assist/e_clinic_book/weight/weight_service.dart';
 import 'package:vet_assist/e_clinic_book/weight/weight_chart.dart';
 import 'package:vet_assist/e_clinic_book/weight/weight_form.dart';
 import 'package:vet_assist/pet_profile/pet_model.dart';
