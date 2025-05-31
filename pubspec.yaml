@@ -23,8 +23,8 @@ dependencies:
   provider: ^6.1.5
   google_maps_flutter: ^2.5.0
   geolocator: ^10.1.0
-  http: ^1.1.0  
-  charts_flutter: ^0.12.0 # upgraded for flutter_svg compatibility
+  http: ^1.1.0  # upgraded for flutter_svg compatibility
+  fl_chart: ^1.0.0
 
 
 dev_dependencies:
