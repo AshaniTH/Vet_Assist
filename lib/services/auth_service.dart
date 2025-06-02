@@ -45,7 +45,7 @@ class AuthService {
         password: password,
       );
       return credential.user;
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       rethrow;
     }
   }
