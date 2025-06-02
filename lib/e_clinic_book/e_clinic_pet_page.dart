@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vet_assist/e_clinic_book/meal/meal_planner_home.dart';
 import 'package:vet_assist/e_clinic_book/vaccination/vaccination_list.dart';
 import 'package:vet_assist/e_clinic_book/weight/weight_list.dart';
 import 'package:vet_assist/pet_profile/pet_model.dart';
@@ -57,7 +58,12 @@ class EClinicPetPage extends StatelessWidget {
                     icon: Icons.restaurant,
                     title: 'Meal\nPlanner',
                     onTap: () {
-                      // TODO: Implement meal planner navigation
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MealPlannerHomePage(pet: pet),
+                        ),
+                      );
                     },
                   ),
                   _buildFeatureCard(
