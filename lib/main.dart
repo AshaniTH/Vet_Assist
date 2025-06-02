@@ -1,13 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
 import 'package:provider/provider.dart';
 import 'package:vet_assist/e_clinic_book/vaccination/vaccination_service.dart';
 import 'package:vet_assist/e_clinic_book/weight/weight_service.dart';
-=======
-import 'package:flutter_dotenv/flutter_dotenv.dart'; // ✅ Add this
->>>>>>> Stashed changes
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // Add this
 import 'package:vet_assist/forgot_password_email.dart';
 import 'package:vet_assist/login.dart';
 import 'package:vet_assist/option.dart';
@@ -67,7 +64,6 @@ class MyApp extends StatelessWidget {
         '/forgot_password': (context) => const ForgotPasswordEmailPage(),
         '/verification': (context) => const VerificationPendingPage(),
         '/I updated my password': (context) => const LoginScreen(),
-<<<<<<< Updated upstream
 
         '/pet_profile_home': (context) => const PetProfileHomePage(),
         '/pet_profile_create': (context) {
@@ -76,10 +72,8 @@ class MyApp extends StatelessWidget {
         },
         '/option': (context) => const HomePage(),
         '/nearby_vets': (context) => NearbyVetHospitalsPage(), // ✅ Add route
-=======
         '/nearby_vets': (context) => NearbyVetHospitalsPage(),
         '/chat': (context) => ChatScreen(),
->>>>>>> Stashed changes
       },
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),

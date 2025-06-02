@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import "package:flutter_dotenv/flutter_dotenv.dart";
 
 class GeminiService {
   final String _apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
