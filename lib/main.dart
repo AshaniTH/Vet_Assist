@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vet_assist/e_clinic_book/meal/meal_service.dart';
 import 'package:vet_assist/e_clinic_book/vaccination/vaccination_service.dart';
 import 'package:vet_assist/e_clinic_book/weight/weight_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart'; // Add this
@@ -20,7 +21,7 @@ import 'package:vet_assist/chat_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: "api.env"); // ✅ Load environment file
+  await dotenv.load(fileName: "api.env"); //  Load environment file
   await Firebase.initializeApp();
   runApp(
     MultiProvider(
@@ -28,6 +29,7 @@ Future<void> main() async {
         Provider(create: (_) => PetService()),
         Provider(create: (_) => VaccinationService()),
         Provider<WeightService>(create: (_) => WeightService()),
+        Provider(create: (_) => MealService()),
       ],
       child: const MyApp(),
     ),
@@ -71,7 +73,7 @@ class MyApp extends StatelessWidget {
           return PetProfileCreatePage(petType: args['petType']);
         },
         '/option': (context) => const HomePage(),
-        '/nearby_vets': (context) => NearbyVetHospitalsPage(), // ✅ Add route
+        '/nearby_vets': (context) => NearbyVetHospitalsPage(), //  Add route
         '/nearby_vets': (context) => NearbyVetHospitalsPage(),
         '/chat': (context) => ChatScreen(),
       },
