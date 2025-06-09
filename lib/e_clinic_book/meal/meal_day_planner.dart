@@ -157,7 +157,10 @@ class _MealDayPlannerPageState extends State<MealDayPlannerPage> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: Color(0xFF219899)),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -188,6 +191,7 @@ class _MealDayPlannerPageState extends State<MealDayPlannerPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF219899),
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text('Add'),
                 ),
@@ -281,6 +285,7 @@ class _MealDayPlannerPageState extends State<MealDayPlannerPage> {
                           }),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF219899),
+                        foregroundColor: Colors.white,
                       ),
                       child: const Text('Add Meal'),
                     ),
@@ -306,6 +311,7 @@ class _MealDayPlannerPageState extends State<MealDayPlannerPage> {
                       onPressed: () => _saveMealPlan(meals),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF219899),
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: const Text('Save Meal Plan'),
