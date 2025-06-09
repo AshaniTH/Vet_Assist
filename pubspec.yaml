@@ -19,12 +19,13 @@ dependencies:
   image_picker: ^1.1.2
   cloud_firestore: ^5.6.7
   firebase_storage: ^12.4.5
-  intl: ^0.20.2
+  intl: ^0.17.0
   provider: ^6.1.5
   google_maps_flutter: ^2.5.0
   geolocator: ^10.1.0
-  http: ^1.1.0   # upgraded for flutter_svg compatibility
-
+  http: ^1.1.0  # upgraded for flutter_svg compatibility
+  fl_chart: ^1.0.0
+  flutter_dotenv: ^5.1.0  # ✅ For loading Gemini API key
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +41,7 @@ flutter:
     - images/bot.png
     - images/location.png
     - images/pngwing.com (68).png
+    - images/doggy and cat 1 (1).png
     - assest/icons/google.svg
     - assest/icons/fb.svg
-    - images/doggy and cat 1 (1).png
+    - api.env   # ✅ Add this to load Gemini API key

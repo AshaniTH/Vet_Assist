@@ -2,6 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vet_assist/e_clinic_book/meal/meal_service.dart';
+import 'package:vet_assist/e_clinic_book/vaccination/vaccination_service.dart';
+import 'package:vet_assist/e_clinic_book/weight/weight_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // Add this
 import 'package:vet_assist/forgot_password_email.dart';
 import 'package:vet_assist/login.dart';
 import 'package:vet_assist/option.dart';
@@ -12,14 +16,21 @@ import 'package:vet_assist/signin.dart';
 import 'package:vet_assist/splash.dart';
 import 'package:vet_assist/start.dart';
 import 'package:vet_assist/verification_pending.dart';
-import 'package:vet_assist/nearby_vets.dart'; // ✅ Import the nearby vet page
+import 'package:vet_assist/nearby_vets.dart';
+import 'package:vet_assist/chat_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "api.env"); //  Load environment file
   await Firebase.initializeApp();
   runApp(
     MultiProvider(
-      providers: [Provider(create: (_) => PetService())],
+      providers: [
+        Provider(create: (_) => PetService()),
+        Provider(create: (_) => VaccinationService()),
+        Provider<WeightService>(create: (_) => WeightService()),
+        Provider(create: (_) => MealService()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -32,6 +43,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Vet Assist',
+      theme: ThemeData(
+        primaryColor: const Color(0xFF219899),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF219899),
+          foregroundColor: Colors.white,
+          elevation: 2,
+          titleTextStyle: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
       routes: {
         '/splash': (context) => const Splash(),
         '/start': (context) => const Start(),
@@ -47,7 +73,9 @@ class MyApp extends StatelessWidget {
           return PetProfileCreatePage(petType: args['petType']);
         },
         '/option': (context) => const HomePage(),
-        '/nearby_vets': (context) => NearbyVetHospitalsPage(), // ✅ Add route
+        '/nearby_vets': (context) => NearbyVetHospitalsPage(), //  Add route
+        '/nearby_vets': (context) => NearbyVetHospitalsPage(),
+        '/chat': (context) => ChatScreen(),
       },
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -57,7 +85,9 @@ class MyApp extends StatelessWidget {
           }
           if (snapshot.hasData) {
             final user = snapshot.data!;
-            return user.emailVerified ? HomePage() : VerificationPendingPage();
+            return user.emailVerified
+                ? const HomePage()
+                : const VerificationPendingPage();
           }
           return const Start();
         },

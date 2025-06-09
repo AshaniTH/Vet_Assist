@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vet_assist/e_clinic_book/e_clinic_book_home.dart';
+import 'package:vet_assist/menu/menu_drawer.dart';
 import 'package:vet_assist/nearby_vets.dart';
 import 'package:vet_assist/pet_profile/pet_list_page.dart';
 import 'package:vet_assist/start.dart';
 import 'package:vet_assist/user_profile/user_profile_page.dart';
 import 'package:vet_assist/user_profile/user_profile_summary.dart';
 import 'package:vet_assist/verification_pending.dart';
+import 'package:vet_assist/chat_screen.dart'; // ✅ Import chatbot screen
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? _userName;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -121,7 +125,9 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color(0xFFF7F7F7),
+      drawer: const MenuDrawer(),
       appBar: AppBar(
         backgroundColor: const Color(0xFF219899),
         elevation: 0,
@@ -145,7 +151,9 @@ class _HomePageState extends State<HomePage> {
                 ),
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.white, size: 32),
-          onPressed: () {},
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
         ),
         actions: [
           Padding(
@@ -198,7 +206,12 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
                 textColor: const Color(0xFF219899),
                 shadow: true,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ChatScreen()),
+                  );
+                },
               ),
               const SizedBox(height: 18),
               FeatureCard(
@@ -208,7 +221,14 @@ class _HomePageState extends State<HomePage> {
                 color: const Color(0xFF219899),
                 textColor: Colors.white,
                 shadow: false,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EClinicHomePage(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 18),
               FeatureCard(
